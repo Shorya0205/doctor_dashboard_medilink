@@ -1,0 +1,179 @@
+:root{
+  --primary-gradient: linear-gradient(135deg, #00d4aa 0%, #00a085 100%);
+  --bg-primary:#0a0a0a;
+  --bg-glass: rgba(255,255,255,0.05);
+  --text-primary:#ffffff;
+  --text-secondary:#cccccc;
+  --text-muted:#888888;
+  --border-primary: rgba(255,255,255,0.1);
+  --border-accent: rgba(0, 212, 170, 0.3);
+}
+
+/* Override core tokens to remain on #23262A family but with glass accents */
+:root{
+  --bg:#23262A;
+  --panel:#2A2E33;
+  --muted:#A9B1BA;
+  --text:#F3F5F7;
+  --primary:#5B8DEF;
+  --accent:#3CCB7F;
+  --danger:#F26666;
+  --border:#34383E;
+  --shadow:0 10px 30px rgba(0,0,0,.25)
+}
+
+/* Page canvas wider and roomier */
+.page{max-width:1440px;margin:0 auto;padding:36px}
+body{line-height:1.7}
+
+/* Glass card utility */
+.card{background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  border:1px solid var(--border);
+  border-radius:18px;padding:22px;box-shadow:var(--shadow)}
+.card:hover{box-shadow:0 15px 45px rgba(0,0,0,.35)}
+
+/* Toolbar glass look */
+.toolbar{backdrop-filter: blur(16px);background: var(--bg-glass);border:1px solid var(--border-primary)}
+.toolbar .field span{color:var(--text-secondary)}
+.toolbar input,.toolbar select{background:#2F3439;border:1px solid var(--border);border-radius:12px;color:var(--text);padding:10px 12px}
+
+/* Buttons with gradient accents */
+.btn{background:var(--primary);}
+.btn.ghost{background:transparent;border:1px solid var(--border);}
+.btn:hover{transform: translateY(-1px);box-shadow: 0 8px 24px rgba(0,0,0,.25)}
+.split{display:flex;gap:10px}
+
+/* Headings with subtle gradient underline */
+.card h2{position:relative;padding-bottom:8px;margin-bottom:18px}
+.card h2:after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background: var(--primary-gradient);opacity:.35}
+
+/* Tiles, timeline, contacts already added above; just add hover polish */
+.tile{transition: box-shadow .25s, transform .25s}
+.tile:hover{transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25)}
+.file{transition: box-shadow .25s, transform .25s}
+.file:hover{transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.25)}
+.contact{transition: box-shadow .25s}
+.contact:hover{box-shadow: 0 10px 24px rgba(0,0,0,.25)}
+
+/* Make grids roomier */
+.grid{gap:28px}
+.section{gap:28px}
+.tiles{gap:18px}
+.files{gap:16px}
+.notes{gap:14px}
+
+/* Sticky aside spacing */
+.actions{top:36px}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+
+.page{max-width:1280px;margin:0 auto;padding:28px}
+.header{display:flex;align-items:center;gap:16px;justify-content:space-between;margin-bottom:18px}
+.back-link{color:var(--muted);text-decoration:none}
+.header h1{font-size:22px;margin:0;font-weight:700}
+.header-actions .btn{margin-left:8px}
+
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:var(--shadow)}
+
+.patient-header{display:flex;gap:20px;align-items:center;justify-content:space-between}
+.identity{display:flex;gap:14px;align-items:center}
+.avatar{width:52px;height:52px;border-radius:12px;display:grid;place-items:center;background:#343941;color:#E2E8F0;font-weight:800}
+.who .row{display:flex;gap:10px;align-items:center}
+.who .name{font-weight:700}
+.vitals{display:flex;gap:18px}
+.blood-group{display:flex;flex-direction:column;align-items:flex-end;background:rgba(242,102,102,.10);border:1px solid rgba(242,102,102,.35);color:#FFD4D4;padding:10px 14px;border-radius:12px}
+.blood-group strong{color:#FFD4D4;font-size:20px}
+.last-visit{display:flex;flex-direction:column;align-items:flex-end;color:var(--muted)}
+
+.alerts{margin:20px 0}
+.alert{display:flex;gap:12px;align-items:flex-start;border-radius:14px;padding:12px 16px}
+.alert.critical{background:rgba(242,102,102,.12);border:1px solid rgba(242,102,102,.35)}
+.alert .alert-title{font-weight:700}
+.alert .alert-text{color:#FFD4D4}
+
+/* Layout: two columns with sticky aside */
+.main{display:grid;grid-template-columns: minmax(0,1fr) 360px;gap:20px;align-items:start}
+.actions{position:sticky;top:24px}
+
+.section{display:flex;flex-direction:column;gap:16px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid .card{height:100%}
+
+.list{display:flex;flex-direction:column;gap:16px}
+.list-item .label{display:block;color:var(--muted);margin-bottom:8px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{padding:8px 12px;border-radius:999px;background:#34383E;border:1px solid var(--border);font-size:13px}
+
+.vax-status{display:flex;flex-direction:column;gap:10px}
+.vax-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px dashed var(--border);border-radius:12px}
+.vax-row .status{font-size:12px;padding:5px 10px;border-radius:999px}
+.vax-row .done{background:rgba(60,203,127,.15);border:1px solid rgba(60,203,127,.35);color:#D1FADF}
+.vax-row .due{background:rgba(250,176,5,.15);border:1px solid rgba(250,176,5,.35);color:#FFE8A3}
+.vax-row .upcoming{background:rgba(91,141,239,.15);border:1px solid rgba(91,141,239,.35);color:#DBE7FF}
+
+.bullets{margin:0;padding-left:20px;color:#E2E8F0}
+
+.tabs{display:flex;gap:10px;margin-bottom:12px}
+.tab{background:#2F3439;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer}
+.tab.active{background:#3A4046}
+.tab-panels .panel{display:none}
+.tab-panels .panel.active{display:block}
+
+.files{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.file{border:1px solid var(--border);border-radius:14px;background:#2F3439;padding:12px}
+.file .thumb{height:120px;border-radius:10px;background:#3A4046;margin-bottom:10px;display:grid;place-items:center;color:#E2E8F0}
+
+.notes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.note{border:1px solid var(--border);border-radius:12px;padding:12px;background:#2F3439}
+
+.actions .action-list{display:flex;flex-direction:column;gap:12px}
+.btn{background:var(--primary);border:none;color:white;padding:12px 14px;border-radius:12px;cursor:pointer}
+.btn.full{width:100%}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text)}
+.btn.tiny{padding:6px 10px;font-size:12px}
+.switch {display:flex;gap:10px;align-items:center;margin-top:10px;color:#E2E8F0}
+.switch input{width:18px;height:18px}
+
+.modal[hidden]{display:none}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;padding:18px;z-index:50}
+.modal-content{width:min(560px,92vw);background:#24282D;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow)}
+.field{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+textarea,input,select{width:100%;background:#2F3439;border:1px solid var(--border);color:var(--text);border-radius:12px;padding:12px}
+
+/* Toolbar */
+.toolbar{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:20px}
+.field.inline{display:grid;grid-template-columns: auto 1fr;gap:8px;align-items:center}
+
+/* Tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.tile{background:#2F3439;border:1px solid var(--border);border-radius:14px;padding:14px}
+.tile .k{color:var(--muted);font-size:12px}
+.tile .v{font-size:20px;font-weight:700}
+.tile .t{color:var(--muted);font-size:12px}
+
+/* Timeline */
+.timeline{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.timeline li{position:relative;padding-left:24px}
+.timeline li::before{content:"";position:absolute;left:8px;top:4px;width:8px;height:8px;border-radius:50%;background:#5B8DEF}
+.timeline li .date{color:var(--muted);font-size:12px}
+.timeline li .title{font-weight:700}
+.timeline li .desc{color:#E2E8F0}
+
+/* Contacts */
+.contacts{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.contact{background:#2F3439;border:1px solid var(--border);border-radius:14px;padding:12px}
+.contact .role{color:var(--muted);font-size:12px}
+.contact .name{font-weight:700}
+.contact .phone{color:#E2E8F0}
+
+/* Spacing tweaks */
+.card h2{margin-top:0;margin-bottom:14px}
+.section{gap:22px}
+.grid{gap:22px}
+
+@media (max-width: 1200px){
+  .main{grid-template-columns:1fr}
+  .actions{position:static}
+}

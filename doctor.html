@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Doctor View – Worker Health Record</title>
+  <link rel="stylesheet" href="doctor_style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page">
+    <!-- Header / Patient Summary -->
+    <header class="header">
+      <a class="back-link" href="/authenticate">← Back</a>
+      <h1>Worker Health Record</h1>
+      <div class="header-actions">
+        <button class="btn ghost" id="printRecord">Print</button>
+      </div>
+    </header>
+
+    <!-- Toolbar: search + filters -->
+    <div class="toolbar card">
+      <div class="toolbar-left">
+        <label class="field inline">
+          <span>Search</span>
+          <input type="search" id="searchRecords" placeholder="Find prescriptions, notes, labs..." />
+        </label>
+      </div>
+      <div class="toolbar-right">
+        <label class="field inline">
+          <span>Type</span>
+          <select id="filterType">
+            <option value="all">All</option>
+            <option value="prescriptions">Prescriptions</option>
+            <option value="notes">Notes</option>
+            <option value="labs">Lab Results</option>
+          </select>
+        </label>
+        <label class="field inline">
+          <span>From</span>
+          <input type="date" id="filterFrom" />
+        </label>
+        <label class="field inline">
+          <span>To</span>
+          <input type="date" id="filterTo" />
+        </label>
+      </div>
+    </div>
+
+    <!-- Patient Header (Minimal Profile) -->
+    <section class="patient-header card">
+      <div class="identity">
+        <div class="avatar">W</div>
+        <div class="who">
+          <div class="row">
+            <span class="label">Worker ID</span>
+            <span class="value" id="workerId">KL-MW-2024-1234</span>
+            <button class="btn tiny" id="showQR">QR</button>
+          </div>
+          <div class="row">
+            <span class="value name" id="name">Rajesh Kumar</span>
+            <span class="dot">•</span>
+            <span class="value" id="ageGender">31, Male</span>
+          </div>
+        </div>
+      </div>
+      <div class="vitals">
+        <div class="blood-group" title="Blood Group">
+          <span>Blood Group</span>
+          <strong id="bloodGroup">O+</strong>
+        </div>
+        <div class="last-visit">
+          <span>Last Visit</span>
+          <strong id="lastVisit">2025-09-01</strong>
+        </div>
+      </div>
+    </section>
+
+    <!-- Critical Alerts (Allergies, Emergency) -->
+    <section class="alerts" id="alerts">
+      <div class="alert critical">
+        <span class="icon">⚠️</span>
+        <div>
+          <div class="alert-title">Critical Allergies</div>
+          <div class="alert-text" id="allergiesText">Penicillin, Peanuts</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="main">
+      <div class="section">
+        <div class="grid">
+          <!-- Core Health Information -->
+          <section class="card">
+            <h2>Core Health Information</h2>
+            <div class="list">
+              <div class="list-item">
+                <span class="label">Medical History</span>
+                <div class="chips" id="historyChips">
+                  <!-- chips injected by JS -->
+                </div>
+              </div>
+              <div class="list-item">
+                <span class="label">Vaccination Status</span>
+                <div class="vax-status" id="vaxStatus">
+                  <!-- status rows injected by JS -->
+                </div>
+              </div>
+              <div class="list-item">
+                <span class="label">Ongoing Treatments</span>
+                <ul class="bullets" id="ongoingTreatments">
+                  <!-- items injected by JS -->
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <!-- Prescriptions & Reports -->
+          <section class="card">
+            <h2>Prescriptions & Reports</h2>
+            <div class="tabs">
+              <button class="tab active" data-tab="prescriptions">Prescriptions</button>
+              <button class="tab" data-tab="notes">Doctor Notes</button>
+              <button class="tab" data-tab="labs">Lab Results</button>
+            </div>
+            <div class="tab-panels">
+              <div class="panel active" id="tab-prescriptions">
+                <div class="files" id="prescriptionFiles"></div>
+              </div>
+              <div class="panel" id="tab-notes">
+                <ul class="notes" id="doctorNotes"></ul>
+              </div>
+              <div class="panel" id="tab-labs">
+                <div class="files" id="labResults"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- Vitals & Measurements -->
+        <section class="card">
+          <h2>Vitals & Measurements</h2>
+          <div class="tiles" id="vitalsTiles"></div>
+        </section>
+
+        <!-- Visits Timeline -->
+        <section class="card">
+          <h2>Visits Timeline</h2>
+          <ol class="timeline" id="visitsTimeline"></ol>
+        </section>
+
+        <!-- Patient Contacts -->
+        <section class="card">
+          <h2>Contacts & Next of Kin</h2>
+          <div class="contacts" id="contacts"></div>
+        </section>
+      </div>
+
+      <!-- Doctor Actions -->
+      <aside class="card actions">
+        <h2>Doctor Actions</h2>
+        <div class="action-list">
+          <button class="btn full" id="addPrescription">Add / Update Prescription</button>
+          <button class="btn full" id="addDiagnosis">Record New Diagnosis / Notes</button>
+          <button class="btn full" id="setReminder">Set Reminder</button>
+          <button class="btn full" id="uploadReport">Upload Report</button>
+          <button class="btn full" id="orderLabTest">Order Lab Test</button>
+          <button class="btn full" id="requestFollowup">Request Follow-Up</button>
+          <div class="split">
+            <button class="btn ghost" id="downloadPDF">Download PDF</button>
+            <button class="btn ghost" id="shareRecord">Share</button>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="flagCritical" />
+            <span>Flag Critical Case (Notify Authority)</span>
+          </label>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Simple Modals -->
+  <div class="modal" id="modal-prescription" hidden>
+    <div class="modal-content">
+      <h3>Add / Update Prescription</h3>
+      <textarea id="prescriptionInput" rows="5" placeholder="Enter medicines and dosage..."></textarea>
+      <div class="modal-actions">
+        <button class="btn" id="savePrescription">Save</button>
+        <button class="btn ghost" data-close>Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-diagnosis" hidden>
+    <div class="modal-content">
+      <h3>Record New Diagnosis / Notes</h3>
+      <textarea id="diagnosisInput" rows="5" placeholder="Enter diagnosis, findings, plan..."></textarea>
+      <div class="modal-actions">
+        <button class="btn" id="saveDiagnosis">Save</button>
+        <button class="btn ghost" data-close>Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal-reminder" hidden>
+    <div class="modal-content">
+      <h3>Set Reminder</h3>
+      <label class="field">
+        <span>Type</span>
+        <select id="reminderType">
+          <option>Medicine</option>
+          <option>Vaccination</option>
+          <option>Checkup</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>When</span>
+        <input type="datetime-local" id="reminderWhen" />
+      </label>
+      <div class="modal-actions">
+        <button class="btn" id="saveReminder">Save</button>
+        <button class="btn ghost" data-close>Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="doctor_script.js"></script>
+</body>
+</html>

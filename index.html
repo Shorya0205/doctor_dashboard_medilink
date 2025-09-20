@@ -1,231 +1,746 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Doctor View – Worker Health Record</title>
-  <link rel="stylesheet" href="doctor_style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediLink - Doctor Dashboard</title>
+    <link rel="stylesheet" href="doctor_style_new.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="page">
-    <!-- Header / Patient Summary -->
-    <header class="header">
-      <a class="back-link" href="/authenticate">← Back</a>
-      <h1>Worker Health Record</h1>
-      <div class="header-actions">
-        <button class="btn ghost" id="printRecord">Print</button>
-      </div>
-    </header>
-
-    <!-- Toolbar: search + filters -->
-    <div class="toolbar card">
-      <div class="toolbar-left">
-        <label class="field inline">
-          <span>Search</span>
-          <input type="search" id="searchRecords" placeholder="Find prescriptions, notes, labs..." />
-        </label>
-      </div>
-      <div class="toolbar-right">
-        <label class="field inline">
-          <span>Type</span>
-          <select id="filterType">
-            <option value="all">All</option>
-            <option value="prescriptions">Prescriptions</option>
-            <option value="notes">Notes</option>
-            <option value="labs">Lab Results</option>
-          </select>
-        </label>
-        <label class="field inline">
-          <span>From</span>
-          <input type="date" id="filterFrom" />
-        </label>
-        <label class="field inline">
-          <span>To</span>
-          <input type="date" id="filterTo" />
-        </label>
-      </div>
-    </div>
-
-    <!-- Patient Header (Minimal Profile) -->
-    <section class="patient-header card">
-      <div class="identity">
-        <div class="avatar">W</div>
-        <div class="who">
-          <div class="row">
-            <span class="label">Worker ID</span>
-            <span class="value" id="workerId">KL-MW-2024-1234</span>
-            <button class="btn tiny" id="showQR">QR</button>
-          </div>
-          <div class="row">
-            <span class="value name" id="name">Rajesh Kumar</span>
-            <span class="dot">•</span>
-            <span class="value" id="ageGender">31, Male</span>
-          </div>
-        </div>
-      </div>
-      <div class="vitals">
-        <div class="blood-group" title="Blood Group">
-          <span>Blood Group</span>
-          <strong id="bloodGroup">O+</strong>
-        </div>
-        <div class="last-visit">
-          <span>Last Visit</span>
-          <strong id="lastVisit">2025-09-01</strong>
-        </div>
-      </div>
-    </section>
-
-    <!-- Critical Alerts (Allergies, Emergency) -->
-    <section class="alerts" id="alerts">
-      <div class="alert critical">
-        <span class="icon">⚠️</span>
-        <div>
-          <div class="alert-title">Critical Allergies</div>
-          <div class="alert-text" id="allergiesText">Penicillin, Peanuts</div>
-        </div>
-      </div>
-    </section>
-
-    <div class="main">
-      <div class="section">
-        <div class="grid">
-          <!-- Core Health Information -->
-          <section class="card">
-            <h2>Core Health Information</h2>
-            <div class="list">
-              <div class="list-item">
-                <span class="label">Medical History</span>
-                <div class="chips" id="historyChips">
-                  <!-- chips injected by JS -->
+    <!-- Modern Dashboard Layout -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>MediLink</span>
                 </div>
-              </div>
-              <div class="list-item">
-                <span class="label">Vaccination Status</span>
-                <div class="vax-status" id="vaxStatus">
-                  <!-- status rows injected by JS -->
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
                 </div>
-              </div>
-              <div class="list-item">
-                <span class="label">Ongoing Treatments</span>
-                <ul class="bullets" id="ongoingTreatments">
-                  <!-- items injected by JS -->
-                </ul>
-              </div>
+                <div class="menu-item active">
+                    <i class="fas fa-users"></i>
+                    <span>Patients</span>
+                    <span class="patient-indicator">Lokesh S.</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>Appointments</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <span>Map Overview</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                    <span class="notification-badge">2</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
             </div>
-          </section>
-
-          <!-- Prescriptions & Reports -->
-          <section class="card">
-            <h2>Prescriptions & Reports</h2>
-            <div class="tabs">
-              <button class="tab active" data-tab="prescriptions">Prescriptions</button>
-              <button class="tab" data-tab="notes">Doctor Notes</button>
-              <button class="tab" data-tab="labs">Lab Results</button>
+            
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=50&h=50&fit=crop&crop=face" alt="Dr. Sarah Wilson" class="profile-image">
+                    <div class="user-info">
+                        <div class="user-name">Dr. Sarah Wilson</div>
+                        <div class="user-role">Cardiologist</div>
+                    </div>
+                </div>
             </div>
-            <div class="tab-panels">
-              <div class="panel active" id="tab-prescriptions">
-                <div class="files" id="prescriptionFiles"></div>
-              </div>
-              <div class="panel" id="tab-notes">
-                <ul class="notes" id="doctorNotes"></ul>
-              </div>
-              <div class="panel" id="tab-labs">
-                <div class="files" id="labResults"></div>
-              </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1>Patient Details - Lokesh Solanki</h1>
+                    <p>Construction Worker • Worker ID: KL-MW-2024-1234</p>
+                </div>
+                <div class="header-right">
+                    <button class="icon-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <button class="icon-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <button class="icon-btn">
+                        <i class="fas fa-comments"></i>
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i> Add Note
+                    </button>
+                </div>
+            </header>
+
+            <!-- Patient Information Dashboard -->
+            <div class="dashboard-content">
+                <!-- Patient Profile Section -->
+                <div class="patient-profile-section">
+                    <div class="patient-card">
+                        <div class="patient-header">
+                            <div class="patient-avatar">
+                                <img src="../profile/lokesh migrant worker.jpg" alt="Patient Photo" id="patientPhoto">
+                                <div class="blood-group-badge">
+                                    <i class="fas fa-tint"></i>
+                                    <span id="bloodGroup">O+</span>
+                                </div>
+                            </div>
+                            <div class="patient-info">
+                                <h2 class="patient-name" id="patientName">Lokesh Solanki</h2>
+                                <p class="patient-age-gender" id="patientAgeGender">19 years, Male</p>
+                                <div class="worker-details">
+                                    <div class="worker-id">
+                                        <i class="fas fa-id-card"></i>
+                                        <span id="workerId">KL-MW-2024-1234</span>
+                                    </div>
+                                    <div class="occupation">
+                                        <i class="fas fa-hard-hat"></i>
+                                        <span id="occupation">Construction Worker</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="patient-actions">
+                                <button class="btn-primary">
+                                    <i class="fas fa-edit"></i> Update Record
+                                </button>
+                                <button class="btn-secondary">
+                                    <i class="fas fa-print"></i> Print Report
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Health Summary Cards -->
+                <div class="health-summary-row">
+                    <div class="health-card">
+                        <div class="card-header">
+                            <i class="fas fa-user-md"></i>
+                            <h3>Medical History</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="condition-pills" id="medicalHistory">
+                                <span class="condition-pill">Hypertension</span>
+                                <span class="condition-pill">Type 2 Diabetes</span>
+                                <span class="condition-pill">Lower Back Pain</span>
+                                <span class="condition-pill">Allergic Rhinitis</span>
+                                <span class="condition-pill">Vitamin D Deficiency</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="health-card">
+                        <div class="card-header">
+                            <i class="fas fa-pills"></i>
+                            <h3>Current Treatments</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="treatments-list">
+                                <div class="treatment-item">
+                                    <div class="medicine-name">Metformin 500mg</div>
+                                    <div class="medicine-schedule">Twice daily after meals</div>
+                                    <div class="medicine-doctor">Dr. Sharma</div>
+                                </div>
+                                <div class="treatment-item">
+                                    <div class="medicine-name">Lisinopril 10mg</div>
+                                    <div class="medicine-schedule">Once daily morning</div>
+                                    <div class="medicine-doctor">Dr. Patel</div>
+                                </div>
+                                <div class="treatment-item">
+                                    <div class="medicine-name">Vitamin D3 2000 IU</div>
+                                    <div class="medicine-schedule">Once daily with food</div>
+                                    <div class="medicine-doctor">Dr. Singh</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="health-card">
+                        <div class="card-header">
+                            <i class="fas fa-syringe"></i>
+                            <h3>Vaccination Status</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="vaccination-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 70%"></div>
+                                </div>
+                                <span class="progress-text">70% Complete</span>
+                            </div>
+                            <div class="vaccination-recent">
+                                <div class="vaccine-item completed">
+                                    <i class="fas fa-check"></i>
+                                    <span>COVID-19 Booster - March 15, 2024</span>
+                                </div>
+                                <div class="vaccine-item pending">
+                                    <i class="fas fa-clock"></i>
+                                    <span>Influenza - Due Oct 30, 2024</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Dashboard -->
+                <div class="analytics-section">
+                    <div class="analytics-header">
+                        <h2><i class="fas fa-chart-line"></i> Health Analytics</h2>
+                        <div class="analytics-controls">
+                            <select id="analyticsTimeframe" class="timeframe-selector">
+                                <option value="week">Last Week</option>
+                                <option value="month" selected>Last Month</option>
+                                <option value="quarter">Last Quarter</option>
+                                <option value="year">Last Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="analytics-grid">
+                        <!-- Vital Signs Chart -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-heartbeat"></i> Vital Signs Trend</h3>
+                                <div class="chart-legend">
+                                    <span class="legend-item"><span class="legend-color bp"></span>Blood Pressure</span>
+                                    <span class="legend-item"><span class="legend-color hr"></span>Heart Rate</span>
+                                    <span class="legend-item"><span class="legend-color temp"></span>Temperature</span>
+                                </div>
+                            </div>
+                            <div class="chart-container">
+                                <canvas id="vitalSignsChart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <!-- Health Score Gauge -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-tachometer-alt"></i> Overall Health Score</h3>
+                            </div>
+                            <div class="health-score-container">
+                                <div class="health-gauge">
+                                    <canvas id="healthScoreGauge"></canvas>
+                                    <div class="gauge-center">
+                                        <span class="score-value">78</span>
+                                        <span class="score-label">Good</span>
+                                    </div>
+                                </div>
+                                <div class="health-factors">
+                                    <div class="factor-item">
+                                        <span class="factor-label">Physical Health</span>
+                                        <div class="factor-bar">
+                                            <div class="factor-progress" style="width: 82%"></div>
+                                        </div>
+                                        <span class="factor-value">82%</span>
+                                    </div>
+                                    <div class="factor-item">
+                                        <span class="factor-label">Mental Health</span>
+                                        <div class="factor-bar">
+                                            <div class="factor-progress" style="width: 75%"></div>
+                                        </div>
+                                        <span class="factor-value">75%</span>
+                                    </div>
+                                    <div class="factor-item">
+                                        <span class="factor-label">Medication Compliance</span>
+                                        <div class="factor-bar">
+                                            <div class="factor-progress" style="width: 90%"></div>
+                                        </div>
+                                        <span class="factor-value">90%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Medical Timeline -->
+                        <div class="chart-card timeline-card">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-timeline"></i> Medical Timeline</h3>
+                                <button class="timeline-filter">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                            </div>
+                            <div class="medical-timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Sep 15, 2024</div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <i class="fas fa-user-md"></i>
+                                            <h4>Routine Checkup</h4>
+                                        </div>
+                                        <p>Blood pressure: 140/90 mmHg. Prescribed new medication.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Aug 28, 2024</div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <i class="fas fa-flask"></i>
+                                            <h4>Lab Results</h4>
+                                        </div>
+                                        <p>HbA1c: 7.2%. Blood glucose levels slightly elevated.</p>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-date">Jul 10, 2024</div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-header">
+                                            <i class="fas fa-stethoscope"></i>
+                                            <h4>Consultation</h4>
+                                        </div>
+                                        <p>Reported back pain after lifting heavy materials. Recommended physiotherapy.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Risk Assessment -->
+                        <div class="chart-card">
+                            <div class="chart-header">
+                                <h3><i class="fas fa-shield-alt"></i> Risk Assessment</h3>
+                            </div>
+                            <div class="risk-assessment">
+                                <div class="risk-category high">
+                                    <div class="risk-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                                    <div class="risk-content">
+                                        <h4>High Risk</h4>
+                                        <p>Hypertension with family history</p>
+                                        <span class="risk-probability">85%</span>
+                                    </div>
+                                </div>
+                                <div class="risk-category medium">
+                                    <div class="risk-icon"><i class="fas fa-info-circle"></i></div>
+                                    <div class="risk-content">
+                                        <h4>Medium Risk</h4>
+                                        <p>Occupational hazard exposure</p>
+                                        <span class="risk-probability">45%</span>
+                                    </div>
+                                </div>
+                                <div class="risk-category low">
+                                    <div class="risk-icon"><i class="fas fa-check-circle"></i></div>
+                                    <div class="risk-content">
+                                        <h4>Low Risk</h4>
+                                        <p>Regular exercise routine</p>
+                                        <span class="risk-probability">15%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Information Tabs -->
+                <div class="tabbed-panel">
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="prescriptions">
+                            <i class="fas fa-file-prescription"></i>
+                            Prescriptions
+                        </button>
+                        <button class="tab-btn" data-tab="notes">
+                            <i class="fas fa-sticky-note"></i>
+                            Notes
+                        </button>
+                        <button class="tab-btn" data-tab="reports">
+                            <i class="fas fa-flask"></i>
+                            Lab Reports
+                        </button>
+                        <button class="tab-btn" data-tab="visits">
+                            <i class="fas fa-calendar-check"></i>
+                            Visit History
+                        </button>
+                    </div>
+
+                    <div class="tab-content">
+                        <!-- Prescriptions Tab -->
+                        <div class="tab-panel active" id="prescriptions-panel">
+                            <div class="prescriptions-grid">
+                                <div class="prescription-card">
+                                    <div class="prescription-header">
+                                        <div class="prescription-icon">
+                                            <i class="fas fa-file-prescription"></i>
+                                        </div>
+                                        <div class="prescription-info">
+                                            <h4>Prescription #001</h4>
+                                            <p>September 15, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="prescription-medicines">
+                                        <div class="medicine-item">
+                                            <span class="medicine-name">Metformin 500mg</span>
+                                            <span class="medicine-dosage">Twice daily after meals</span>
+                                        </div>
+                                        <div class="medicine-item">
+                                            <span class="medicine-name">Lisinopril 10mg</span>
+                                            <span class="medicine-dosage">Once daily morning</span>
+                                        </div>
+                                    </div>
+                                    <div class="prescription-doctor">Dr. Sharma</div>
+                                </div>
+                                
+                                <div class="prescription-card">
+                                    <div class="prescription-header">
+                                        <div class="prescription-icon">
+                                            <i class="fas fa-file-prescription"></i>
+                                        </div>
+                                        <div class="prescription-info">
+                                            <h4>Prescription #002</h4>
+                                            <p>August 28, 2024</p>
+                                        </div>
+                                    </div>
+                                    <div class="prescription-medicines">
+                                        <div class="medicine-item">
+                                            <span class="medicine-name">Ibuprofen 400mg</span>
+                                            <span class="medicine-dosage">As needed for pain</span>
+                                        </div>
+                                        <div class="medicine-item">
+                                            <span class="medicine-name">Vitamin D3 2000 IU</span>
+                                            <span class="medicine-dosage">Once daily with food</span>
+                                        </div>
+                                    </div>
+                                    <div class="prescription-doctor">Dr. Kumar</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes Tab -->
+                        <div class="tab-panel" id="notes-panel">
+                            <div class="notes-timeline">
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <div class="note-date">September 15, 2024</div>
+                                        <div class="note-author">Dr. Sharma</div>
+                                    </div>
+                                    <div class="note-content">
+                                        <h4>Blood Pressure Management</h4>
+                                        <p>Patient's BP remains elevated at 140/90. Increasing Lisinopril dosage and recommending sodium reduction. Follow-up in 2 weeks to monitor response.</p>
+                                    </div>
+                                    <div class="note-tags">
+                                        <span class="tag">Hypertension</span>
+                                        <span class="tag">Medication Adjustment</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="note-item">
+                                    <div class="note-header">
+                                        <div class="note-date">August 28, 2024</div>
+                                        <div class="note-author">Dr. Kumar</div>
+                                    </div>
+                                    <div class="note-content">
+                                        <h4>Back Pain Assessment</h4>
+                                        <p>Patient reports lower back pain after lifting heavy construction materials. Physical examination shows muscle tension. Prescribed anti-inflammatory and physiotherapy referral.</p>
+                                    </div>
+                                    <div class="note-tags">
+                                        <span class="tag">Occupational Injury</span>
+                                        <span class="tag">Physiotherapy</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lab Reports Tab -->
+                        <div class="tab-panel" id="reports-panel">
+                            <div class="reports-grid">
+                                <div class="report-card">
+                                    <div class="report-header">
+                                        <div class="report-icon">
+                                            <i class="fas fa-flask"></i>
+                                        </div>
+                                        <div class="report-info">
+                                            <h4>Blood Test Report</h4>
+                                            <p>September 10, 2024</p>
+                                        </div>
+                                        <div class="report-status normal">Normal</div>
+                                    </div>
+                                    <div class="report-details">
+                                        <div class="report-item">
+                                            <span class="test-name">HbA1c</span>
+                                            <span class="test-value">7.2%</span>
+                                        </div>
+                                        <div class="report-item">
+                                            <span class="test-name">Cholesterol</span>
+                                            <span class="test-value">180 mg/dL</span>
+                                        </div>
+                                        <div class="report-item">
+                                            <span class="test-name">Creatinine</span>
+                                            <span class="test-value">1.1 mg/dL</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="report-card">
+                                    <div class="report-header">
+                                        <div class="report-icon">
+                                            <i class="fas fa-x-ray"></i>
+                                        </div>
+                                        <div class="report-info">
+                                            <h4>X-Ray Report</h4>
+                                            <p>August 20, 2024</p>
+                                        </div>
+                                        <div class="report-status normal">Normal</div>
+                                    </div>
+                                    <div class="report-details">
+                                        <div class="report-item">
+                                            <span class="test-name">Chest X-Ray</span>
+                                            <span class="test-value">Clear lungs</span>
+                                        </div>
+                                        <div class="report-item">
+                                            <span class="test-name">Heart Size</span>
+                                            <span class="test-value">Normal</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Visit History Tab -->
+                        <div class="tab-panel" id="visits-panel">
+                            <div class="visit-history">
+                                <div class="visit-item">
+                                    <div class="visit-date">September 15, 2024</div>
+                                    <div class="visit-type">Routine Checkup</div>
+                                    <div class="visit-doctor">Dr. Sharma</div>
+                                    <div class="visit-summary">Blood pressure monitoring, medication adjustment</div>
+                                </div>
+                                <div class="visit-item">
+                                    <div class="visit-date">August 28, 2024</div>
+                                    <div class="visit-type">Consultation</div>
+                                    <div class="visit-doctor">Dr. Kumar</div>
+                                    <div class="visit-summary">Back pain assessment, physiotherapy referral</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Metrics Row -->
+                <div class="quick-metrics">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <h3>Recent Visits</h3>
+                            <div class="metric-trend positive">↗ 2</div>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">8</span>
+                        </div>
+                        <div class="metric-chart">
+                            <canvas id="visitsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <h3>Average consultations</h3>
+                            <div class="metric-trend positive">↗ 4.2%</div>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">28</span>
+                            <span class="unit">per day</span>
+                        </div>
+                        <div class="metric-chart">
+                            <canvas id="consultationsChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <h3>Patient satisfaction</h3>
+                            <div class="metric-trend positive">↗ 1.2%</div>
+                        </div>
+                        <div class="metric-value">
+                            <span class="number">98.5%</span>
+                        </div>
+                        <div class="metric-chart">
+                            <canvas id="satisfactionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Dashboard Row -->
+                <div class="dashboard-row">
+                    <!-- Left Column -->
+                    <div class="dashboard-left">
+                        <!-- Patient Details Card -->
+                        <div class="info-card">
+                            <div class="card-header">
+                                <h3>Patient Details</h3>
+                                <button class="view-more-btn">View more →</button>
+                            </div>
+                            
+                            <div class="patient-stats">
+                                <div class="stat-item">
+                                    <span class="stat-label">Critical</span>
+                                    <span class="stat-value">3</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Stable</span>
+                                    <span class="stat-value">15</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-label">Recovery</span>
+                                    <span class="stat-value">8</span>
+                                </div>
+                            </div>
+
+                            <div class="current-patient">
+                                <div class="patient-avatar">
+                                    <i class="fas fa-user-injured"></i>
+                                </div>
+                                <div class="patient-details">
+                                    <div class="route-info">
+                                        <span class="location start">ICU</span>
+                                        <div class="route-line"></div>
+                                        <span class="location end">Room 205</span>
+                                    </div>
+                                    <div class="patient-meta">
+                                        <span class="patient-id">#MED4523</span>
+                                        <div class="status-timeline">
+                                            <div class="timeline-item">
+                                                <span class="time">10:07AM</span>
+                                                <span class="status">Admitted</span>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <span class="time">11:15AM</span>
+                                                <span class="status">Blood Test</span>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <span class="time">14:33PM</span>
+                                                <span class="status">Consultation</span>
+                                            </div>
+                                            <div class="timeline-item">
+                                                <span class="time">16:15PM</span>
+                                                <span class="status">Discharge</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="progress-section">
+                                <div class="progress-header">
+                                    <span>Treatment Progress</span>
+                                    <span class="progress-percentage">85% Completed</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Medical Equipment Status -->
+                        <div class="equipment-card">
+                            <div class="equipment-image">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=200&h=150&fit=crop" alt="Medical Equipment">
+                            </div>
+                            <div class="equipment-info">
+                                <h4>Advanced<br>MRI Scanner</h4>
+                                <div class="equipment-id">MRI-07 Unit</div>
+                                <div class="equipment-stats">
+                                    <div class="stat">
+                                        <span class="value">95</span>
+                                        <span class="label">Scans</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="value">8.2</span>
+                                        <span class="label">Avg hrs</span>
+                                    </div>
+                                </div>
+                                <div class="equipment-details">
+                                    <div class="detail">
+                                        <span>24 hrs</span>
+                                        <span>15 min</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="equipment-actions">
+                                <button class="action-btn secondary">
+                                    <i class="fas fa-chevron-up"></i>
+                                </button>
+                                <button class="action-btn secondary">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="dashboard-right">
+                        <!-- Performance Analytics -->
+                        <div class="analytics-card">
+                            <h3>Performance Analytics</h3>
+                            <div class="performance-legend">
+                                <div class="legend-item">
+                                    <div class="legend-dot average"></div>
+                                    <span>Average Performance</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-dot current"></div>
+                                    <span>Current Performance</span>
+                                </div>
+                            </div>
+                            
+                            <div class="performance-chart">
+                                <div class="chart-circle">
+                                    <canvas id="performanceChart" width="200" height="200"></canvas>
+                                    <div class="chart-center">
+                                        <div class="performance-score">92</div>
+                                        <div class="performance-unit">Score</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hospital Map Overview -->
+                        <div class="map-card">
+                            <h3>Hospital Overview</h3>
+                            <div class="map-container">
+                                <div class="map-placeholder">
+                                    <div class="location-marker main">
+                                        <span>Main Hospital</span>
+                                    </div>
+                                    <div class="location-marker branch">
+                                        <span>Branch Clinic</span>
+                                    </div>
+                                    <div class="distance-info">
+                                        <span class="distance">2.4 km</span>
+                                        <span class="travel-time">5 min drive</span>
+                                    </div>
+                                </div>
+                                <div class="map-controls">
+                                    <button class="map-btn">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                    <button class="map-btn">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <button class="map-btn">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </section>
-        </div>
-
-        <!-- Vitals & Measurements -->
-        <section class="card">
-          <h2>Vitals & Measurements</h2>
-          <div class="tiles" id="vitalsTiles"></div>
-        </section>
-
-        <!-- Visits Timeline -->
-        <section class="card">
-          <h2>Visits Timeline</h2>
-          <ol class="timeline" id="visitsTimeline"></ol>
-        </section>
-
-        <!-- Patient Contacts -->
-        <section class="card">
-          <h2>Contacts & Next of Kin</h2>
-          <div class="contacts" id="contacts"></div>
-        </section>
-      </div>
-
-      <!-- Doctor Actions -->
-      <aside class="card actions">
-        <h2>Doctor Actions</h2>
-        <div class="action-list">
-          <button class="btn full" id="addPrescription">Add / Update Prescription</button>
-          <button class="btn full" id="addDiagnosis">Record New Diagnosis / Notes</button>
-          <button class="btn full" id="setReminder">Set Reminder</button>
-          <button class="btn full" id="uploadReport">Upload Report</button>
-          <button class="btn full" id="orderLabTest">Order Lab Test</button>
-          <button class="btn full" id="requestFollowup">Request Follow-Up</button>
-          <div class="split">
-            <button class="btn ghost" id="downloadPDF">Download PDF</button>
-            <button class="btn ghost" id="shareRecord">Share</button>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="flagCritical" />
-            <span>Flag Critical Case (Notify Authority)</span>
-          </label>
-        </div>
-      </aside>
+        </main>
     </div>
-  </div>
 
-  <!-- Simple Modals -->
-  <div class="modal" id="modal-prescription" hidden>
-    <div class="modal-content">
-      <h3>Add / Update Prescription</h3>
-      <textarea id="prescriptionInput" rows="5" placeholder="Enter medicines and dosage..."></textarea>
-      <div class="modal-actions">
-        <button class="btn" id="savePrescription">Save</button>
-        <button class="btn ghost" data-close>Cancel</button>
-      </div>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn active">Light</button>
+        <button class="theme-btn">Dark</button>
     </div>
-  </div>
 
-  <div class="modal" id="modal-diagnosis" hidden>
-    <div class="modal-content">
-      <h3>Record New Diagnosis / Notes</h3>
-      <textarea id="diagnosisInput" rows="5" placeholder="Enter diagnosis, findings, plan..."></textarea>
-      <div class="modal-actions">
-        <button class="btn" id="saveDiagnosis">Save</button>
-        <button class="btn ghost" data-close>Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="modal-reminder" hidden>
-    <div class="modal-content">
-      <h3>Set Reminder</h3>
-      <label class="field">
-        <span>Type</span>
-        <select id="reminderType">
-          <option>Medicine</option>
-          <option>Vaccination</option>
-          <option>Checkup</option>
-        </select>
-      </label>
-      <label class="field">
-        <span>When</span>
-        <input type="datetime-local" id="reminderWhen" />
-      </label>
-      <div class="modal-actions">
-        <button class="btn" id="saveReminder">Save</button>
-        <button class="btn ghost" data-close>Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <script src="doctor_script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="doctor_script_new.js"></script>
 </body>
 </html>
